@@ -1,0 +1,8 @@
+flask
+flask-cors
+pdfplumber
+transformers
+sentence-transformers
+faiss-cpu
+
+# you can install all of these with "pip install -r requirements.txt"

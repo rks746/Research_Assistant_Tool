@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Research Assistant</title>
+</head>
+<body>
+    <h1>Upload PDF and Get Summary</h1>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".pdf" required>
+        <button type="submit">Upload & Summarize</button>
+    </form>
+    <h2>Summary:</h2>
+    <div id="summary"></div>
+
+    <h2>Search the Document</h2>
+    <input type="text" id="queryInput" placeholder="Enter your query">
+    <button onclick="searchQuery()">Search</button>
+    <div id="results"></div>
+
+    <script>
+        const form = document.getElementById("uploadForm");
+        const summaryDiv = document.getElementById("summary");
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const fileInput = form.querySelector('input[name="file"]');
+            const formData = new FormData();
+            formData.append("file", fileInput.files[0]);
+
+            const res = await fetch("/upload", {
+                method: "POST",
+                body: formData
+            });
+
+            const data = await res.json();
+            if(data.summary){
+                summaryDiv.textContent = data.summary;
+            }
+        });
+
+        async function searchQuery() {
+            const query = document.getElementById("queryInput").value;
+            const res = await fetch("/search", {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ query })
+            });
+            const data = await res.json();
+            const resultsDiv = document.getElementById("results");
+            resultsDiv.innerHTML = "";
+            if(data.results && data.results.length > 0){
+                data.results.forEach(text => {
+                    const p = document.createElement("p");
+                    p.textContent = text;
+                    resultsDiv.appendChild(p);
+                });
+            } else {
+                resultsDiv.textContent = "No results found.";
+            }
+        }
+    </script>
+</body>
+</html>
