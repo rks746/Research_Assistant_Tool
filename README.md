@@ -10,3 +10,5 @@ Implemented document chunking and embeddings using SentenceTransformers, indexed
 Built a user-friendly interface to upload PDFs, view summaries, and retrieve relevant sections through natural language queries.
 
 Improved research workflows by enabling fast navigation through large volumes of technical content.
+
+Code currently in 'mvp' branch
